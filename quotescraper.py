@@ -36,10 +36,23 @@ def get_article(article_from_html, *args, **kwargs):
     raw_date = article_from_html.xpath('.//div[@class="quote__header_date"]/text()')
     datetime_act = raw_date[0].split('в')
     datetime_act_1 = [part.strip() for part in datetime_act]
-    test = str(raw_date[0])
-    datetime_sec = re.match(r'(\d{1,2}\.\d{1,2}\.\d{4}).+(\d{1,2}\:\d{2})', test)
+    datetime_sec = clean_date(raw_date)
     datetime_third = str(raw_date[0]).replace('в', '').strip()
     input()
+
+
+def clean_date(raw_date):
+    test = str(raw_date[0])
+    first_level = re.findall(r'(\d{1,2}\.\d{1,2}\.\d{4})|(\d{1,2}\:\d{2})', test)
+    second_level = []
+    for snippet in first_level:
+        for chunk in snippet:
+            second_level.append(chunk) if chunk else None
+    pure_date_str = ' '.join(second_level)
+    if pure_date_str[-5] == ' ':
+        pure_date_str = pure_date_str[:-4] + '0' + pure_date_str[-4:]
+    pure_date = datetime.strptime(pure_date_str, '%d.%m.%Y %H:%M')
+    return pure_date
 
 
 def master_def():
