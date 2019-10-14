@@ -8,13 +8,6 @@ from datetime import datetime, timedelta
 from itertools import groupby
 
 
-article = {'id': '',
-           'date': '',
-           'body': '',
-           'rating': ''
-           }
-
-
 def make_request():
     response = requests.request('GET', 'https://bash.im/')
     parsed = html.fromstring(response.text)
@@ -22,7 +15,7 @@ def make_request():
     return parsed
 
 
-def get_articles_from_page(parsed):
+def get_all_articles_from_page(parsed):
     articles_from_html = parsed.xpath('//article[@class="quote"]')
     articles_ready = []
     for ar in articles_from_html:
@@ -31,19 +24,23 @@ def get_articles_from_page(parsed):
     return articles_ready
 
 
-def get_article(article_from_html, *args, **kwargs):
-    id = article_from_html.xpath('string(//@data-quote)')
+def get_article(article_from_html):
+    quote_id = int(article_from_html.xpath('string(.//@data-quote)'))
+    quote_datetime = clean_quote_date(article_from_html)
+    quote_text = clean_quote_text(article_from_html)
+    quote_rating = clean_quote_rating(article_from_html)
+    article = {'id': quote_id,
+               'date': quote_datetime,
+               'body': quote_text,
+               'rating': quote_rating
+               }
+    return article
+
+
+def clean_quote_date(article_from_html):
     raw_date = article_from_html.xpath('.//div[@class="quote__header_date"]/text()')
-    datetime_act = raw_date[0].split('в')
-    datetime_act_1 = [part.strip() for part in datetime_act]
-    datetime_sec = clean_date(raw_date)
-    datetime_third = str(raw_date[0]).replace('в', '').strip()
-    input()
-
-
-def clean_date(raw_date):
-    test = str(raw_date[0])
-    first_level = re.findall(r'(\d{1,2}\.\d{1,2}\.\d{4})|(\d{1,2}\:\d{2})', test)
+    date_pre = str(raw_date[0])
+    first_level = re.findall(r'(\d{1,2}\.\d{1,2}\.\d{4})|(\d{1,2}\:\d{2})', date_pre)
     second_level = []
     for snippet in first_level:
         for chunk in snippet:
@@ -55,9 +52,25 @@ def clean_date(raw_date):
     return pure_date
 
 
+def clean_quote_text(article_from_html):
+    raw_body = article_from_html.xpath('.//div[@class="quote__body"]/text()')
+    pure_text = str(raw_body[0]).strip()
+    return pure_text
+
+
+def clean_quote_rating(article_from_html):
+    raw_rating = article_from_html.xpath('.//div[@class="quote__total"]/text()')
+    try:
+        pure_rating = int(raw_rating[0])
+    except ValueError:
+        pure_rating = 0
+    return pure_rating
+
+
 def master_def():
     parsed = make_request()
-    articles = get_articles_from_page(parsed)
+    articles = get_all_articles_from_page(parsed)
+    return articles
 
 
 master_def()
