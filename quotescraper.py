@@ -18,8 +18,8 @@ def make_request():
 def get_all_articles_from_page(parsed):
     articles_from_html = parsed.xpath('//article[@class="quote"]')
     articles_ready = []
-    for ar in articles_from_html:
-        article_ready = get_article(ar)
+    for article_raw in articles_from_html:
+        article_ready = get_article(article_raw)
         articles_ready.append(article_ready)
     return articles_ready
 
@@ -54,7 +54,8 @@ def clean_quote_date(article_from_html):
 
 def clean_quote_text(article_from_html):
     raw_body = article_from_html.xpath('.//div[@class="quote__body"]/text()')
-    pure_text = str(raw_body[0]).strip()
+    raw_text = '\n'.join(raw_body)
+    pure_text = raw_text.strip()
     return pure_text
 
 
@@ -70,7 +71,10 @@ def clean_quote_rating(article_from_html):
 def master_def():
     parsed = make_request()
     articles = get_all_articles_from_page(parsed)
+    with open()
     return articles
+
+
 
 
 master_def()
