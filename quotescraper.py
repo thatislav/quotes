@@ -71,7 +71,7 @@ def clean_quote_rating(article_from_html):
 def master_def():
     parsed = make_request()
     articles = get_all_articles_from_page(parsed)
-    with open()
+    # with open()
     return articles
 
 
