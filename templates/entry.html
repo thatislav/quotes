@@ -4,7 +4,7 @@
 
 <h2>{{ the_title }}</h2>
 
-<form method='POST' action='/search4'>
+<!-- <form method='POST' action='/search4'>
 	<table>
 		<p>Use this form to submit a search request:</p>
 		<tr><td>Phrase:</td><td><input name='phrase' type='TEXT' width='60'></td></tr>
@@ -12,12 +12,18 @@
 	</table>
 	<p>When you're ready, click this button:</p>
 	<p><input value='Do it!' type='SUBMIT'></p>
-</form>
+</form> -->
 
 <p>
-	<form action="http://127.0.0.1:5000/viewlog">
-		<input value = 'Log' type = 'SUBMIT'>
+	<form action="/quotes">
+		<input value = 'Get quotes from Bash right now!!!' type = 'SUBMIT'>
 	</form>
 </p>
+
+<form action="/quotes/?=quote_id">
+	<p>You can jump to particular quote by id:</p>
+	<p><input name="quote_id" type="TEXT"</p>
+	<p><input type="SUBMIT" value="Jump to Quote"></p>
+</form>
 
 {% endblock %}
