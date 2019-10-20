@@ -3,7 +3,7 @@ The server.
 """
 from flask import Flask, render_template, request, escape, session, copy_current_request_context, abort
 from DBcm import UseDatabase
-from quotescraper import scrape
+from quotescraper import scrape_quotes_from_page
 from threading import Thread
 
 
@@ -14,7 +14,7 @@ app.config['dbconfig'] = {'host': '127.0.0.1',
                           'password': 'quotpassquord',
                           'database': 'quoteslogDB', }
 
-quotes = scrape()
+quotes = scrape_quotes_from_page()
 quote_ids = [quote['id'] for quote in quotes]
 
 @app.route('/')

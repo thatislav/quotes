@@ -1,6 +1,6 @@
 """
 The scraper.
-It scrapes quotes and .... What?
+It scrapes quotes from single page. And .... What?
 """
 import re
 import datetime
@@ -12,8 +12,8 @@ from datetime import datetime, timedelta
 from itertools import groupby
 
 
-def make_request() -> 'HtmlElement':
-    response = requests.request('GET', 'https://bash.im/')
+def make_request(page) -> 'HtmlElement':
+    response = requests.request('GET', 'https://bash.im/index/{}'.format(page))
     parsed = html.fromstring(response.text)
     # ('//*[@id="departure-city"]/option[@value]/text()')
     return parsed
@@ -72,11 +72,10 @@ def clean_quote_rating(article_from_html) -> int:
     return pure_rating
 
 
-def scrape():
-    parsed = make_request()
+def scrape_quotes_from_page(page):
+    parsed = make_request(page)
     articles = get_all_articles_from_page(parsed)
-    # with open()
     return articles
 
 
-scrape()
+scrape_quotes_from_page(1)

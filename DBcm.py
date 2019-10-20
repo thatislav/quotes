@@ -1,52 +1,82 @@
 """
 Instrument for connection to the DataBase.
+Adds all quotes to DataBase.
 """
+from quotescraper import scrape_quotes_from_page
+from page_getter import count_pages
 import sqlite3
-from quotescraper import scrape
 
-quotes = scrape()
-quote_ids = [quote['id'] for quote in quotes]
 
+pages = count_pages()
 conn = sqlite3.connect('QuotesDB.db')
 cur = conn.cursor()
 
-cur.execute("""
-CREATE TABLE QUOTES
-(
-[quote_id] integer,
-[quote_date] date,
-[quote_text] text,
-[quote_rate] integer)
-""")
 
-for quote in quotes:
-    cur.execute("""
-    INSERT INTO QUOTES VALUES
-    ({id}, {date}, '{text}', {rating})
-    """.format(**quote))
+def create_table_quotes():
+    try:
+        _SQL_create_table_quotes = """CREATE TABLE QUOTES
+                                    ([quote_id] integer PRIMARY KEY,
+                                    [quote_date] date,
+                                    [quote_text] text,
+                                    [quote_rate] integer)
+                                """
+        cur.execute(_SQL_create_table_quotes)
+        conn.commit()
+    except sqlite3.OperationalError as err:
+        print('\nWARNING: Trying to create table QUOTES, getting:\n"', err, '"')
 
-conn.commit()
 
-cur.execute("""
-SELECT * FROM QUOTES
-""")
-for item in cur.fetchall():
-    for i in item:
-        print(i)
+def scrape_all_quotes(pages_quantity):
+    for page_number in range(1, pages_quantity+1):
+        quotes_from_single_page = scrape_quotes_from_page(page_number)
+        add_quotes_to_db(quotes_from_single_page)
+
+
+def add_quotes_to_db(quotes):
+    # existing_ids = 0
+    for quote in quotes:
+        _SQL_insert_quotes = """INSERT INTO QUOTES 
+                                (quote_id, quote_date, quote_text, quote_rate)
+                                VALUES
+                                ({id}, '{date}', '{text}', {rating})
+                            """.format(**quote)
+        try:
+            cur.execute(_SQL_insert_quotes)
+            conn.commit()
+        except Exception as err:
+            continue
+    #         existing_ids += 1
+    # if existing_ids > 0:
+    #     print('\nWARNING:', existing_ids, 'quotes we just trying to add are already exists.\n')
+
+
+def count_quotes_in_db():
+    _SQL_select_quotes = """
+                            --SELECT quote_id, quote_date, '', '', ''
+                            --FROM QUOTES
+                            --WHERE date(quote_date) = '2019-10-20'
+                            --UNION
+                            SELECT '','','====================', 'QUOTES TOTAL in DB: ', count(quote_id)
+                            FROM QUOTES
+                        """
+    try:
+        cur.execute(_SQL_select_quotes)
+        for item in cur.fetchall():
+            for i in item:
+                print(i)
+    except Exception as err:
+        print('\nWARNING: Something went wrong in "select_quotes":\n"', err, '"')
+
+
+def mainer():
+    create_table_quotes()
+    scrape_all_quotes(pages)
+    # count_quotes_in_db()
+
+
+mainer()
 
 conn.close()
-
-
-class ConnectionErr(Exception):
-    pass
-
-
-class CredentialsErr(Exception):
-    pass
-
-
-class SQLError(Exception):
-    pass
 
 
 class UseDatabase:
