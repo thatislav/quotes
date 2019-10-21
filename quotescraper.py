@@ -13,10 +13,14 @@ from itertools import groupby
 
 
 def make_request(page) -> 'HtmlElement':
-    response = requests.request('GET', 'https://bash.im/index/{}'.format(page))
-    parsed = html.fromstring(response.text)
-    # ('//*[@id="departure-city"]/option[@value]/text()')
-    return parsed
+    try:
+        url = 'https://bash.im/index/{}'.format(page)
+        response = requests.request('GET', url)
+        parsed = html.fromstring(response.text)
+        # ('//*[@id="departure-city"]/option[@value]/text()')
+        return parsed
+    except Exception as err:
+        print('WARNING: some problems with"', url, '"')
 
 
 def get_all_articles_from_page(parsed) -> list:

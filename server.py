@@ -44,7 +44,7 @@ def show_quote_by_id():
         quote_id = 1
     if quote_id < 1 or quote_id > 1000000:
         quote_id = 1
-    print('quote_id = ', quote_id)
+    print('quote_id =', quote_id)
 
     try:
         selecter = DBfiller()
