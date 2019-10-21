@@ -3,6 +3,7 @@ Quotes for quote-lovers
 
 # Run
 Запускается через server.py на http://127.0.0.1:5010/
+Свежесть БД (QuotesDB.db) : 21.10.2019 0:30
 
 # PLAN A:
 
