@@ -14,16 +14,20 @@
 	<p><input value='Do it!' type='SUBMIT'></p>
 </form> -->
 
-<p>
-	<form action="/quotes">
-		<input value = 'Get quotes from Bash right now!!!' type = 'SUBMIT'>
-	</form>
-</p>
+<form action="/all_quotes">
+	<input value = 'Get all quotes from Bash right now!!!' type = 'SUBMIT'>
+</form>
 
-<form action="/quotes/?=quote_id">
+
+<form method='GET' action="/quote/">
 	<p>You can jump to particular quote by id:</p>
-	<p><input name="quote_id" type="TEXT"</p>
+	<p><input name="quote_id_on_html" type="TEXT" placeholder="#quote_number"</p>
 	<p><input type="SUBMIT" value="Jump to Quote"></p>
+</form>
+
+
+<form action="/">
+	<input value = 'HOME' type = 'SUBMIT'>
 </form>
 
 {% endblock %}

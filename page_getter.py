@@ -22,4 +22,4 @@ def count_pages():
     return pages_quantity
 
 
-count_pages()
+# count_pages()

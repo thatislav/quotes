@@ -42,9 +42,9 @@ def add_quotes_to_db(quotes):
                             """.format(**quote)
         try:
             cur.execute(_SQL_insert_quotes)
-            conn.commit()
         except Exception as err:
             continue
+    conn.commit()
     #         existing_ids += 1
     # if existing_ids > 0:
     #     print('\nWARNING:', existing_ids, 'quotes we just trying to add are already exists.\n')
@@ -74,7 +74,7 @@ def mainer():
     # count_quotes_in_db()
 
 
-mainer()
+# mainer()
 
 conn.close()
 

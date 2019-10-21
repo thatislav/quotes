@@ -78,4 +78,4 @@ def scrape_quotes_from_page(page):
     return articles
 
 
-scrape_quotes_from_page(1)
+# scrape_quotes_from_page(1)
