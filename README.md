@@ -1,6 +1,8 @@
 # quotes
 Quotes for quote-lovers
 
+# Run
+Запускается через server.py на http://127.0.0.1:5010/
 
 # PLAN A:
 

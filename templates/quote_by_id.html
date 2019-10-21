@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h2>{{ the_title }}</h2>
+
+<table>
+	<tr>
+		{% for row_title in the_row_titles %}
+			<th>{{row_title}}</th>
+		{% endfor %}
+	</tr>
+	{% for quote in the_quotes %}
+		<tr>
+			{% for item in quote %}
+				<td>{{item}}</td>
+			{% endfor %}
+		</tr>
+	{% endfor %}
+</table>
+
+
+<form method='GET' action="/quote">
+	<p>Once again? You can jump to particular quote by id:</p>
+	<p><input name="quote_id_on_html" type="number" placeholder="#quote_number"</p>
+	<p><input type="SUBMIT" value="Jump to Quote"></p>
+</form>
+
+
+<form action="/">
+	<input value = 'HOME' type = 'SUBMIT'>
+</form>
+
+
+<p>You have waited it! The DataBase is ready and all yours!</p>
+
+
+
+{% endblock %}
